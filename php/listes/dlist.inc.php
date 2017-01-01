@@ -82,6 +82,7 @@ abstract class dlist {
     protected $sentinel;
     /* @var dlist_cursor */
     protected $cursor;
+    protected $len;
     
     public function __construct() {
         $this->sentinel = new cellule();
@@ -92,6 +93,8 @@ abstract class dlist {
         
         $this->cursor->setNext($this->sentinel);
         $this->cursor->setPrevious($this->sentinel);
+        
+        $this->len = 0;
     }
     
     abstract public function compare();
@@ -116,6 +119,8 @@ abstract class dlist {
         $this->cursor->getPrevious()->setNext($c);
         $this->cursor->getNext()->setPrevious($c);
         $this->cursor->setNext($c);
+        
+        $this->len++;
           
         return $c;
     }
@@ -130,12 +135,50 @@ abstract class dlist {
         $this->cursor->getNext()->setPrevious($c);
         $this->cursor->setPrevious($c);
         
+        $this->len++;
+        
         return $c;
     }
     
     public function resetCursor() {
         $this->cursor->setPrevious($this->sentinel);
         $this->cursor->setNext($this->sentinel->getNext());
+    }
+    
+    public function cursorMoveToNext() {
+        $this->cursor->setPrevious($this->cursor->getNext());
+        $this->cursor->setNext($this->cursor->getNext()->getNext());
+    }
+    
+    public function cursorMoveToPrevious() {
+        $this->cursor->setNext($this->cursor->getPrevious());
+        $this->cursor->setPrevious($this->cursor->getPrevious()->getPrevious());
+    }
+    
+    public function cursorIsAtHead() {
+        return ($this->cursor->getPrevious() == $this->sentinel);
+    }
+    
+    public function cursorIsAtTail() {
+        return ($this->cursor->getNext() == $this->sentinel);
+    }
+    
+    public function cursorMoveToHead() {
+        $this->cursor->setPrevious($this->sentinel);
+        $this->cursor->setNext($this->sentinel->getNext());
+    }
+    
+    public function cursorMoveToTail() {
+        $this->cursor->setPrevious($this->sentinel->getPrevious());
+        $this->cursor->setNext($this->sentinel);
+    }
+    
+    public function removeAfterCursor() {
+        
+    }
+    
+    public function removeBeforeCursor() {
+        
     }
     
     public function getSentinel() {
@@ -145,6 +188,10 @@ abstract class dlist {
     public function getCursor() {
         return $this->cursor;
     }
+    
+    public function getLen() {
+        return $this->len;
+    }
 
     public function setSentinel($sentinel) {
         $this->sentinel = $sentinel;
@@ -153,6 +200,11 @@ abstract class dlist {
 
     public function setCursor($cursor) {
         $this->cursor = $cursor;
+        return $this;
+    }
+    
+    public function setLen($len) {
+        $this->len = $len;
         return $this;
     }
 }
