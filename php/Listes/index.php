@@ -14,8 +14,8 @@ class liste extends dlist {
     }
 }
 
-
-$maListe2 = new liste("cellule");
+$cellule = new cellule();
+$maListe2 = new liste($cellule);
 $c = new cellule();
 $maListe2->insertAfterCursor(789, $c);
 $maListe2->insertAfterCursor(999, $c);
@@ -52,17 +52,20 @@ var_dump("=== List ===");
 var_dump($maListe2);
 var_dump("=== Remove before cursor ===");
 var_dump($maListe2->removeBeforeCursor());
+$maListe2->display("/");
 var_dump("=== List ===");
 var_dump($maListe2);
 var_dump("=== Move cursor to tail ===");
 $maListe2->cursorMoveToTail();
 var_dump("=== Remove after cursor ===");
 var_dump($maListe2->removeAfterCursor());
+$maListe2->display("/");
 var_dump("=== Move cursor to previous ===");
 $maListe2->cursorMoveToPrevious();
 var_dump("=== Remove after cursor ===");
 var_dump($maListe2->removeAfterCursor());
 var_dump("=== List ===");
 var_dump($maListe2);
+$maListe2->display("/");
 
 ?>

@@ -5,17 +5,7 @@
  * Cours 73 -- Listes doublement chaînées, partie 1 
  * https://www.youtube.com/watch?v=g9nCpYzdPlE
  */
-interface dlist_cell_interface {
-    public function display();
-    public function getValue();
-    public function getNext();
-    public function getPrevious();
-    public function setValue($value);
-    public function setNext($next);
-    public function setPrevious($previous);
-}
-
-abstract class dlist_cell implements dlist_cell_interface {
+abstract class dlist_cell {
     protected $value;
     /* @var dlist_cell */
     protected $next;
@@ -31,20 +21,24 @@ abstract class dlist_cell implements dlist_cell_interface {
     public function getValue() {
         return $this->value;
     }
-
+    
+    /* @return dlist_cell */
     public function getNext() {
         return $this->next;
     }
 
+    /* @return dlist_cell */
     public function getPrevious() {
         return $this->previous;
     }
 
+    /* @return dlist_cell */
     public function setValue($value) {
         $this->value = $value;
         return $this;
     }
 
+    /* @return dlist_cell */
     public function setNext($next) {
         $this->next = $next;
         return $this;
@@ -62,19 +56,23 @@ class dlist_cursor {
     /* @var dlist_cell */
     protected $previous;
     
+    /* @return dlist_cell */
     public function getNext() {
         return $this->next;
     }
 
+    /* @return dlist_cell */
     public function getPrevious() {
         return $this->previous;
     }
-
+    
+    /* @return dlist_cursor */
     public function setNext($next) {
         $this->next = $next;
         return $this;
     }
-
+    
+    /* @return dlist_cursor */
     public function setPrevious($previous) {
         $this->previous = $previous;
         return $this;
@@ -91,8 +89,8 @@ abstract class dlist {
     /*
      * @var $cellClass : nom de la classe 
      */
-    public function __construct($cellClass) {
-        $this->sentinel = new $cellClass();
+    public function __construct(dlist_cell $cellule) {
+        $this->sentinel = $cellule;
         $this->cursor = new dlist_cursor();
         
         $this->sentinel->setNext($this->sentinel);
@@ -117,7 +115,7 @@ abstract class dlist {
         echo(")");
     }
     
-    public function insertAfterCursor($data, dlist_cell_interface $cellule) {
+    public function insertAfterCursor($data, dlist_cell $cellule) {
         $c = clone($cellule);
         
         $c->setValue($data)
@@ -132,7 +130,7 @@ abstract class dlist {
         return $c;
     }
     
-    public function insertBeforeCursor($data, dlist_cell_interface $cellule) {
+    public function insertBeforeCursor($data, dlist_cell $cellule) {
         $c = clone($cellule);
         
         $c->setValue($data)
@@ -239,17 +237,20 @@ abstract class dlist {
     public function getLen() {
         return $this->len;
     }
-
+    
+    /* @return dlist */
     public function setSentinel($sentinel) {
         $this->sentinel = $sentinel;
         return $this;
     }
-
+    
+    /* @return dlist */
     public function setCursor($cursor) {
         $this->cursor = $cursor;
         return $this;
     }
     
+    /* @return dlist */
     public function setLen($len) {
         $this->len = $len;
         return $this;
